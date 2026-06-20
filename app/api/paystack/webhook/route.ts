@@ -1,46 +1,51 @@
-import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+import crypto from "crypto";
+import { headers } from "next/headers";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
+    // 1. VERIFY PAYSTACK SIGNATURE (VERY IMPORTANT)
+    const hash = crypto
+      .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY!)
+      .update(JSON.stringify(body))
+      .digest("hex");
+
+    const paystackSignature = (await headers()).get("x-paystack-signature");
+
+    if (hash !== paystackSignature) {
+      return new Response("Invalid signature", { status: 401 });
+    }
+
     const event = body.event;
 
-    // We only care about successful payments
     if (event !== "charge.success") {
-      return NextResponse.json({ received: true });
+      return Response.json({ received: true });
     }
 
     const data = body.data;
-
     const reference = data.reference;
-    const status = data.status;
     const amount = data.amount / 100;
 
-    if (status !== "success") {
-      return NextResponse.json({ received: true });
-    }
-
-    // 1. Find payment/enrollment using reference
-    const { data: enrollment, error } = await supabase
+    // 2. FIND ENROLLMENT
+    const { data: enrollment } = await supabaseAdmin
       .from("enrollments")
       .select("*")
       .eq("paystack_reference", reference)
       .single();
 
-    if (error || !enrollment) {
-      console.error("Enrollment not found for reference:", reference);
-      return NextResponse.json({ received: true });
+    if (!enrollment) {
+      return Response.json({ received: true });
     }
 
-    // 2. Update enrollment → ACTIVE
-    await supabase
+    // 3. PREVENT DUPLICATE PROCESSING
+    if (enrollment.payment_status === "paid") {
+      return Response.json({ received: true });
+    }
+
+    // 4. UPDATE ENROLLMENT
+    await supabaseAdmin
       .from("enrollments")
       .update({
         status: "active",
@@ -48,23 +53,17 @@ export async function POST(req: Request) {
       })
       .eq("id", enrollment.id);
 
-    // 3. Create payment record (optional but important)
-    await supabase.from("payments").insert({
+    // 5. CREATE PAYMENT RECORD (safe insert)
+    await supabaseAdmin.from("payments").insert({
       enrollment_id: enrollment.id,
       amount,
       status: "success",
       reference,
     });
 
-    console.log("Payment confirmed & enrollment activated");
-
-    return NextResponse.json({ received: true });
+    return Response.json({ received: true });
   } catch (error) {
-    console.error("Webhook error:", error);
-
-    return NextResponse.json(
-      { error: "Webhook failed" },
-      { status: 500 }
-    );
+    console.error(error);
+    return Response.json({ error: "Webhook failed" }, { status: 500 });
   }
 }

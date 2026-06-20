@@ -43,7 +43,7 @@ export function FinalCta() {
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
 
               <a
-                href="#apply"
+                href="/enrollment"
                 className="inline-flex w-full items-center justify-center rounded-xl bg-white px-8 py-4 text-base font-semibold text-[#6d28d9] shadow-[0_10px_40px_rgba(255,255,255,0.15)] transition-all duration-300 hover:scale-105 hover:bg-white sm:w-auto"
               >
                 Apply Now

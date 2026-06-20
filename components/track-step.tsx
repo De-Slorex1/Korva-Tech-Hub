@@ -4,7 +4,6 @@ import Image from "next/image"
 import courses from "@/data/courses"
 import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react"
 import { Enrollment } from "@/types/enrollements"
-
 type Props = {
   data: Partial<Enrollment>
   setData: React.Dispatch<React.SetStateAction<Partial<Enrollment>>>
@@ -21,19 +20,15 @@ export function TrackStep({
   return (
     <div className="space-y-6">
       {/* Header */}
-
       <div className="text-center">
         <h2 className="text-3xl font-bold text-white">
           Choose Your Program
         </h2>
-
         <p className="mt-2 text-sm text-white/60">
           Select the learning path that best aligns with your goals.
         </p>
       </div>
-
       {/* Programs */}
-
       <div className="grid gap-5">
         {courses.map((course) => {
           const selected =
@@ -46,7 +41,8 @@ export function TrackStep({
               onClick={() =>
                 setData((prev) => ({
                   ...prev,
-                  programId: course.code,
+                  programId: course.code,   // UI label (safe to keep)
+                  courseId: course.id,     // REAL DB ID (IMPORTANT FIX)
                   programName: course.title,
                 }))
               }
@@ -62,14 +58,11 @@ export function TrackStep({
               `}
             >
               {/* Glow */}
-
               {selected && (
                 <div className="absolute inset-0 bg-gradient-to-r from-[#8B5CF6]/10 via-transparent to-transparent" />
               )}
-
               <div className="relative flex gap-5">
                 {/* Image */}
-
                 <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl">
                   <Image
                     src={course.image}
@@ -78,9 +71,7 @@ export function TrackStep({
                     className="object-cover"
                   />
                 </div>
-
                 {/* Content */}
-
                 <div className="flex-1">
                   <div className="flex items-start justify-between gap-3">
                     <div>
@@ -139,9 +130,7 @@ export function TrackStep({
           )
         })}
       </div>
-
       {/* Selected Summary */}
-
       {data.programName && (
         <div className="rounded-2xl border border-[#8B5CF6]/20 bg-[#8B5CF6]/5 p-5">
           <p className="text-sm text-white/60">
@@ -153,9 +142,7 @@ export function TrackStep({
           </h3>
         </div>
       )}
-
       {/* Actions */}
-
       <div className="flex items-center justify-between pt-2">
         <button
           onClick={back}

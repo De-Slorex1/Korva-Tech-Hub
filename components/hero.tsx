@@ -1,5 +1,5 @@
 "use client"
-import { motion } from "framer-motion"
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 import {
   ArrowRight,
   Sparkles,
@@ -11,8 +11,23 @@ import {
 
 import { GridBackground } from "./grid-background"
 import { HeroNetwork } from "./hero-network"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect } from "react"
+
 
 export function Hero() {
+  const router = useRouter()
+  function Counter({ value }: { value: number }) {
+  const motionValue = useMotionValue(0)
+  const spring = useSpring(motionValue, { stiffness: 10, damping: 30 })
+  const display = useTransform(spring, (latest) => Math.floor(latest))
+
+  useEffect(() => {
+    motionValue.set(value)
+  }, [value, motionValue])
+
+  return <motion.span>{display}</motion.span>
+  }
   return (
     <section className="relative overflow-hidden bg-[#050816]">
       {/* Background Grid */}
@@ -56,13 +71,17 @@ export function Hero() {
 
             {/* CTA */}
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <button className="group inline-flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-8 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-violet-500">
+              <button 
+              onClick={() => router.push("/enrollment")}
+              className="group inline-flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-8 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-violet-500">
                 Start Learning
 
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </button>
 
-              <button className="rounded-xl border border-neutral-700 bg-white/5 px-8 py-4 font-semibold text-white backdrop-blur-md transition-all duration-300 hover:bg-white/10">
+              <button 
+              onClick={() => router.push("/courses")}
+              className="rounded-xl border border-neutral-700 bg-white/5 px-8 py-4 font-semibold text-white backdrop-blur-md transition-all duration-300 hover:bg-white/10">
                 Explore Programs
               </button>
             </div>
@@ -71,11 +90,11 @@ export function Hero() {
             <div className="mt-14 grid grid-cols-3 gap-8">
               <div>
                 <h3 className="text-3xl font-bold text-white">
-                  500+
+                 <Counter value={200} />+
                 </h3>
 
                 <p className="mt-1 text-sm text-neutral-400">
-                  Students
+                  <Counter value={5} />
                 </p>
               </div>
 
@@ -100,8 +119,8 @@ export function Hero() {
               </div>
             </div>
           </div>
-
-         <div className="relative">
+           {/* RIGHT CONTENT */}
+         <div className="relative hidden lg:block">
           <HeroNetwork />
         </div>
 

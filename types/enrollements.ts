@@ -7,33 +7,6 @@ export type EnrollmentStatus =
   | "pending"
   | "active"
 
-export interface Enrollment {
-  id: string
-
-  // Student Info
-  firstName: string
-  lastName: string
-  email: string
-  phone: string
-  country: string
-
-  // Program
-  programId: string
-  programName: string
-
-  // Learning Plan
-  paymentPlan: PaymentPlan
-
-  // Payment
-  paymentStatus: PaymentStatus
-  paymentReference: string
-
-  // Enrollment
-  cohort: string
-  enrollmentStatus: EnrollmentStatus
-
-  createdAt: Date
-}
 export type PaymentPlan =
   | "full"
   | "installment"

@@ -1,10 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export async function POST(req: Request) {
   try {
@@ -17,52 +12,68 @@ export async function POST(req: Request) {
       );
     }
 
-    // 1. Get enrollment + course
+    // 1. Get enrollment
     const { data: enrollment, error: enrollError } =
-      await supabase
+      await supabaseAdmin
         .from("enrollments")
-        .select(`
-          *,
-          courses (*)
-        `)
+        .select("*")
         .eq("id", enrollmentId)
         .single();
 
     if (enrollError || !enrollment) {
-      throw new Error("Enrollment not found");
+      return NextResponse.json(
+        { error: "Enrollment not found" },
+        { status: 404 }
+      );
     }
 
-    const course = enrollment.courses;
+    // 2. Get course separately
+    const { data: course, error: courseError } =
+      await supabaseAdmin
+        .from("Course")
+        .select("*")
+        .eq("id", enrollment.course_id)
+        .single();
 
-    if (!course) {
-      throw new Error("Course not found");
+    if (courseError || !course) {
+      return NextResponse.json(
+        { error: "Course not found" },
+        { status: 404 }
+      );
     }
 
-    // 2. Determine amount
-    let amount = course.price_full;
+    // 3. Prevent duplicate payment
+    if (enrollment.payment_status === "paid") {
+      return NextResponse.json({ message: "Already paid" });
+    }
+
+    // 4. Amount logic
+    let amount = course.price;
 
     if (enrollment.payment_plan === "installment") {
-      amount = course.price_installment;
+      amount = course.price / 2;
     }
 
     if (enrollment.payment_plan === "scholarship") {
       return NextResponse.json({
+        success: true,
         message: "Scholarship does not require payment",
       });
     }
 
-    // 3. Generate reference
-    const reference = `KORVA_${Date.now()}_${enrollmentId}`;
+    // 5. Reference
+    let reference = enrollment.paystack_reference;
 
-    // 4. Save reference to enrollment
-    await supabase
-      .from("enrollments")
-      .update({
-        paystack_reference: reference,
-      })
-      .eq("id", enrollmentId);
+    if (!reference) {
+      reference = `KORVA_${Date.now()}_${enrollmentId}`;
 
-    // 5. Initialize Paystack payment
+      await supabaseAdmin
+        .from("enrollments")
+        .update({ paystack_reference: reference })
+        .eq("id", enrollmentId);
+    }
+
+    // 6. Paystack init
     const paystackRes = await fetch(
       "https://api.paystack.co/transaction/initialize",
       {
@@ -73,9 +84,13 @@ export async function POST(req: Request) {
         },
         body: JSON.stringify({
           email,
-          amount: amount * 100, // Paystack uses kobo
+          amount: amount * 100,
           reference,
           callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/payment/success`,
+          metadata: {
+            enrollmentId,
+            courseId: course.id,
+          },
         }),
       }
     );
@@ -83,7 +98,10 @@ export async function POST(req: Request) {
     const paystackData = await paystackRes.json();
 
     if (!paystackData.status) {
-      throw new Error(paystackData.message);
+      return NextResponse.json(
+        { error: paystackData.message },
+        { status: 400 }
+      );
     }
 
     return NextResponse.json({
@@ -92,12 +110,12 @@ export async function POST(req: Request) {
       reference,
     });
   } catch (error: any) {
-    console.error(error);
+    console.error("Paystack Init Error:", error);
 
     return NextResponse.json(
       {
         success: false,
-        error: error.message,
+        error: error.message || "Internal server error",
       },
       { status: 500 }
     );

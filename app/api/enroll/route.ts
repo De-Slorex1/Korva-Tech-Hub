@@ -1,10 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export async function POST(req: Request) {
   try {
@@ -23,88 +18,78 @@ export async function POST(req: Request) {
 
     if (!email || !courseId || !paymentPlan) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { success: false, error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    // 1. Check if user exists in auth
-    let userId: string | null = null;
+    // 1. Create auth user
+    const { data: newUser, error: createError } =
+      await supabaseAdmin.auth.admin.createUser({
+        email,
+        email_confirm: true,
+      });
 
-    const { data: users } =
-      await supabase.auth.admin.listUsers();
-
-    const existingUser = users.users.find(
-      (u) => u.email === email
-    );
-
-    if (existingUser) {
-      userId = existingUser.id;
-    } else {
-      // Create user (NO password - magic link flow later)
-      const { data, error } =
-        await supabase.auth.admin.createUser({
-          email,
-          email_confirm: true,
-        });
-
-      if (error) throw error;
-
-      userId = data.user.id;
+    if (createError) {
+      return NextResponse.json(
+        { success: false, error: createError.message },
+        { status: 400 }
+      );
     }
 
-    // 2. Create or update profile
-    await supabase.from("profiles").upsert({
-      user_id: userId,
-      first_name: firstName,
-      last_name: lastName,
-      phone,
-      country,
-      role: "student",
-    });
+    const userId = newUser.user.id;
 
-    // 3. Create enrollment (PENDING)
+    // 2. Create profile (IMPORTANT FIX: user_id is the key)
+    const { error: profileError } = await supabaseAdmin
+      .from("profiles")
+      .upsert({
+        user_id: userId,
+        first_name: firstName,
+        last_name: lastName,
+        phone,
+        country,
+        email,
+        role: "student",
+      });
+
+    if (profileError) throw profileError;
+
+    // 3. Create enrollment
     const { data: enrollment, error: enrollError } =
-      await supabase
+      await supabaseAdmin
         .from("enrollments")
         .insert({
           user_id: userId,
           course_id: courseId,
-          cohort_id: cohortId,
+          cohort_id: cohortId || null,
           payment_plan: paymentPlan,
           status: "pending",
           payment_status: "pending",
+          start_date: new Date(),
         })
         .select()
         .single();
 
     if (enrollError) throw enrollError;
 
-    // 4. Generate Paystack reference
+    // 4. Paystack reference
     const reference = `KORVA_${Date.now()}_${enrollment.id}`;
 
-    // update enrollment with reference
-    await supabase
+    await supabaseAdmin
       .from("enrollments")
-      .update({
-        paystack_reference: reference,
-      })
+      .update({ paystack_reference: reference })
       .eq("id", enrollment.id);
 
-    // 5. Return response
     return NextResponse.json({
       success: true,
       enrollment,
       reference,
     });
   } catch (error: any) {
-    console.error(error);
+    console.error("Enroll Error:", error);
 
     return NextResponse.json(
-      {
-        success: false,
-        error: error.message,
-      },
+      { success: false, error: error.message },
       { status: 500 }
     );
   }

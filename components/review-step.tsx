@@ -40,38 +40,59 @@ export function ReviewStep({
       ? selectedCourse?.price.installment.discounted
       : selectedCourse?.price.fullPayment.discounted
 
-  const handleProceed = async () => {
-    try {
-      const courseId =
-        COURSE_IDS[data.programId as keyof typeof COURSE_IDS]
+const handleProceed = async () => {
+  try {
+    // 1. Create enrollment first
+    const courseId =
+      COURSE_IDS[data.programId as keyof typeof COURSE_IDS];
 
-      const response = await fetch("/api/applications", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          phone: data.phone,
-          country: data.country,
-          courseId,
-        }),
-      })
+    const enrollRes = await fetch("/api/enroll", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: data.phone,
+        country: data.country,
+        courseId,
+        cohortId: data.cohortId,
+        paymentPlan: data.paymentPlan,
+      }),
+    });
 
-      const result = await response.json()
+    const enrollResult = await enrollRes.json();
 
-      if (!result.success) {
-        throw new Error(result.message)
-      }
-
-      alert("Application submitted successfully")
-    } catch (error) {
-      console.error(error)
-      alert("Failed to submit application")
+    if (!enrollResult.success) {
+      throw new Error(enrollResult.error);
     }
+
+    const enrollmentId = enrollResult.enrollment.id;
+
+    // 2. Immediately initialize payment
+    const payRes = await fetch("/api/paystack/init", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        enrollmentId,
+        email: data.email,
+      }),
+    });
+
+    const payResult = await payRes.json();
+
+    if (!payResult.authorization_url) {
+      throw new Error("Payment init failed");
+    }
+
+    // 3. Redirect to Paystack
+    window.location.href = payResult.authorization_url;
+
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong");
   }
+};
 
   return (
     <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-8 backdrop-blur-xl">

@@ -1,16 +1,16 @@
 "use client"
 
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { ChevronDown, Menu, X } from "lucide-react"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -25,8 +25,21 @@ const portalItems = ["Student", "Instructor", "Admin"]
 
 export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false)
+
   const pathname = usePathname()
   const router = useRouter()
+
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "auto"
+    }
+
+    return () => {
+      document.body.style.overflow = "auto"
+    }
+  }, [mobileOpen])
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/"
@@ -34,99 +47,160 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="w-full bg-[#0a0a0f] text-neutral-200 border-b border-neutral-800">
+    <>
+      <header className="w-full border-b border-neutral-800 bg-[#0a0a0f] text-neutral-200">
 
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
-        {/* LOGO */}
-        <a href="/" className="flex items-center">
+          {/* Logo */}
+
+          <a href="/" className="flex items-center">
+            <Image
+              src="/logo.png"
+              alt="logo"
+              width={120}
+              height={40}
+              priority
+            />
+          </a>
+
+          {/* Desktop Navigation */}
+
+          <nav className="hidden items-center gap-8 lg:flex">
+            {navLinks.map((link) =>
+              link.dropdown ? (
+                <DropdownMenu key={link.label}>
+                  <DropdownMenuTrigger className="flex items-center gap-1 text-base transition hover:text-white">
+                    {link.label}
+                    <ChevronDown className="h-4 w-4" />
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent className="border-neutral-800 bg-[#13131a] text-neutral-200">
+                    {portalItems.map((item) => (
+                      <DropdownMenuItem
+                        key={item}
+                        className="cursor-pointer focus:bg-neutral-800 focus:text-white"
+                      >
+                        {item}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className={
+                    isActive(link.href)
+                      ? "relative text-violet-400 after:absolute after:-bottom-1 after:left-0 after:h-1 after:w-full after:bg-violet-400"
+                      : "text-neutral-300 transition hover:text-white"
+                  }
+                >
+                  {link.label}
+                </a>
+              )
+            )}
+          </nav>
+
+          {/* Right Side */}
+
+          <div className="flex items-center gap-4">
+
+            <a
+              href="#"
+              className="hidden transition hover:text-white sm:inline"
+            >
+              Sign In
+            </a>
+
+            <button
+              onClick={() => router.push("/enrollment")}
+              className="rounded-md bg-violet-600 px-5 py-2 text-white transition hover:bg-violet-700"
+            >
+              Enroll Now
+            </button>
+
+            <button
+              className="lg:hidden"
+              onClick={() => setMobileOpen(true)}
+            >
+              <Menu className="h-7 w-7" />
+            </button>
+
+          </div>
+
+        </div>
+      </header>
+
+      {/* Backdrop */}
+
+      <div
+        onClick={() => setMobileOpen(false)}
+        className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden ${
+          mobileOpen
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
+        }`}
+      />
+
+      {/* Mobile Menu */}
+
+      <div
+        className={`fixed top-0 right-0 z-50 h-screen w-full bg-[#050816] transition-transform duration-300 ease-in-out lg:hidden ${
+          mobileOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+
+        <div className="flex h-16 items-center justify-between border-b border-neutral-800 px-6">
+
           <Image
             src="/logo.png"
             alt="logo"
             width={120}
             height={40}
-            // className="h-10 w-auto object-contain"
-            priority
           />
-        </a>
 
-        {/* DESKTOP NAV */}
-        <nav className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) =>
-            link.dropdown ? (
-              <DropdownMenu key={link.label}>
-                <DropdownMenuTrigger className="flex items-center gap-1 text-base hover:text-white transition-colors">
-                  {link.label}
-                  <ChevronDown className="h-4 w-4" />
-                </DropdownMenuTrigger>
+          <button onClick={() => setMobileOpen(false)}>
+            <X className="h-8 w-8 text-white" />
+          </button>
 
-                <DropdownMenuContent className="border-neutral-800 bg-[#13131a] text-neutral-200">
-                  {portalItems.map((item) => (
-                    <DropdownMenuItem
-                      key={item}
-                      className="cursor-pointer focus:bg-neutral-800 focus:text-white"
-                    >
-                      {item}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <a
-                key={link.label}
-                href={link.href}
-                className={
-                  isActive(link.href)
-                    ? "relative text-[#b794f6] after:absolute after:-bottom-1 after:left-0 after:h-1 after:w-full after:bg-[#b794f6]"
-                    : "text-neutral-300 hover:text-white transition-colors"
+        </div>
+
+        <nav className="mt-8 flex flex-col gap-3 px-6">
+
+          {navLinks.map((link) => (
+            <button
+              key={link.label}
+              onClick={() => {
+                setMobileOpen(false)
+
+                if (link.href !== "#") {
+                  router.push(link.href)
                 }
-              >
-                {link.label}
-              </a>
-            )
-          )}
-        </nav>
-
-        {/* RIGHT SIDE */}
-        <div className="flex items-center gap-4">
-          <a href="#" className="hidden sm:inline hover:text-white transition">
-            Sign In
-          </a>
+              }}
+              className={`rounded-xl px-5 py-4 text-left text-lg transition ${
+                isActive(link.href)
+                  ? "bg-violet-600 text-white"
+                  : "text-neutral-300 hover:bg-neutral-800"
+              }`}
+            >
+              {link.label}
+            </button>
+          ))}
 
           <button
-            onClick={() => router.push("/enrollment")}
-            className="rounded-md bg-[#9333ea] px-5 py-2 cursor-pointer text-white hover:bg-[#7e22ce] transition"
+            onClick={() => {
+              setMobileOpen(false)
+              router.push("/enrollment")
+            }}
+            className="mt-8 rounded-xl bg-violet-600 py-4 text-lg font-semibold text-white transition hover:bg-violet-700"
           >
             Enroll Now
           </button>
 
-          <button
-            className="lg:hidden"
-            onClick={() => setMobileOpen((o) => !o)}
-          >
-            {mobileOpen ? <X /> : <Menu />}
-          </button>
-        </div>
-      </div>
-
-      {/* MOBILE NAV */}
-      {mobileOpen && (
-        <nav className="lg:hidden border-t border-neutral-800 px-4 py-4 flex flex-col gap-2">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className={
-                isActive(link.href)
-                  ? "px-3 py-2 rounded bg-neutral-800 text-white"
-                  : "px-3 py-2 rounded hover:bg-neutral-800"
-              }
-            >
-              {link.label}
-            </a>
-          ))}
         </nav>
-      )}
-    </header>
+
+      </div>
+    </>
   )
 }

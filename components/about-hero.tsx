@@ -138,10 +138,20 @@ export function AboutHero() {
 
         {/* STATS */}
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-3">
-
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/30">
-
+          <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
+            <div className="
+  w-full
+  rounded-2xl
+  border border-white/10
+  bg-white/[0.03]
+  p-6
+  text-center
+  backdrop-blur-sm
+  transition-all
+  duration-300
+  hover:-translate-y-1
+  hover:border-violet-500/30
+">
               <h3 className="text-4xl font-bold text-white">
                 500+
               </h3>
@@ -152,7 +162,19 @@ export function AboutHero() {
 
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/30">
+                       <div className="
+  w-full
+  rounded-2xl
+  border border-white/10
+  bg-white/[0.03]
+  p-6
+  text-center
+  backdrop-blur-sm
+  transition-all
+  duration-300
+  hover:-translate-y-1
+  hover:border-violet-500/30
+  ">
 
               <h3 className="text-4xl font-bold text-white">
                 10+
@@ -164,7 +186,19 @@ export function AboutHero() {
 
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/30">
+                                   <div className="
+  w-full
+  rounded-2xl
+  border border-white/10
+  bg-white/[0.03]
+  p-6
+  text-center
+  backdrop-blur-sm
+  transition-all
+  duration-300
+  hover:-translate-y-1
+  hover:border-violet-500/30
+  ">
 
               <h3 className="text-4xl font-bold text-white">
                 AI
