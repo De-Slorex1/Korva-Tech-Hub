@@ -14,6 +14,7 @@ import {
   ArrowRight,
   CheckCircle2,
 } from "lucide-react"
+import { useState } from "react";
 
 interface ReviewStepProps {
   data: Partial<Enrollment>
@@ -27,7 +28,7 @@ export function ReviewStep({
   const selectedCourse = courses.find(
     (course) => course.code === data.programId
   )
-
+  const [loading, setLoading] = useState(false);
   const paymentLabel =
     data.paymentPlan === "full"
       ? "Full Payment"
@@ -40,13 +41,20 @@ export function ReviewStep({
       ? selectedCourse?.price.installment.discounted
       : selectedCourse?.price.fullPayment.discounted
 
-const handleProceed = async () => {
+  const handleProceed = async () => {
   try {
-    // 1. Create enrollment first
-    const courseId =
-      COURSE_IDS[data.programId as keyof typeof COURSE_IDS];
+    setLoading(true);
 
-    const enrollRes = await fetch("/api/enroll", {
+    const courseId = data.programId
+      ? COURSE_IDS[data.programId as keyof typeof COURSE_IDS]
+      : null;
+
+    if (!courseId) {
+      alert("Invalid course selected");
+      return;
+    }
+    
+    const res = await fetch("/api/enroll", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -61,36 +69,18 @@ const handleProceed = async () => {
       }),
     });
 
-    const enrollResult = await enrollRes.json();
+    const result = await res.json();
 
-    if (!enrollResult.success) {
-      throw new Error(enrollResult.error);
+    if (!result.authorization_url) {
+      throw new Error(result.error || "Payment failed");
     }
 
-    const enrollmentId = enrollResult.enrollment.id;
-
-    // 2. Immediately initialize payment
-    const payRes = await fetch("/api/paystack/init", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        enrollmentId,
-        email: data.email,
-      }),
-    });
-
-    const payResult = await payRes.json();
-
-    if (!payResult.authorization_url) {
-      throw new Error("Payment init failed");
-    }
-
-    // 3. Redirect to Paystack
-    window.location.href = payResult.authorization_url;
-
-  } catch (error) {
-    console.error(error);
+    window.location.href = result.authorization_url;
+  } catch (err) {
+    console.error(err);
     alert("Something went wrong");
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -243,13 +233,17 @@ const handleProceed = async () => {
 
         <button
           onClick={handleProceed}
-          className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition hover:bg-violet-500"
+          disabled={loading}
+          className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition hover:bg-violet-500 disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          {data.paymentPlan === "scholarship"
-            ? "Submit Application"
-            : "Proceed to Payment"}
-
-          <ArrowRight className="h-4 w-4" />
+          {loading ? "Redirecting..." : (
+            <>
+              {data.paymentPlan === "scholarship"
+                ? "Submit Application"
+                : "Proceed to Payment"}
+              <ArrowRight className="h-4 w-4" />
+            </>
+          )}
         </button>
       </div>
     </div>
