@@ -10,7 +10,7 @@ const team = [
   {
     name: "Team Member",
     role: "CFO",
-    image: "/mojisola.png",
+    image: "/moji.png",
     bio: "Guiding learners through real-world software engineering and modern development practices.",
   },
   
