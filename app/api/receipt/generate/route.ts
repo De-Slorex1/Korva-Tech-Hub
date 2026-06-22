@@ -1,11 +1,9 @@
 export const runtime = "nodejs";
-
-import puppeteer from "puppeteer-core";
-import chromium from "@sparticuz/chromium";
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { receiptTemplate } from "@/lib/receiptTemplate";
 import { numberToWords } from "@/lib/numberToWords";
+import { launchBrowser } from "@/lib/launchBrowser";
 
 export async function POST(req: Request) {
   let browser = null;
@@ -86,15 +84,7 @@ export async function POST(req: Request) {
     // 4. HTML
     const html = receiptTemplate(receiptData);
 
-    // 5. FIXED PUPPETEER (Vercel-safe + stable)
-    const exePath = await chromium.executablePath();
-
-    browser = await puppeteer.launch({
-      args: chromium.args,
-      executablePath: exePath,
-      headless: true,
-    });
-
+    browser = await launchBrowser();
     const page = await browser.newPage();
 
     // FIX 1: safer request interception
