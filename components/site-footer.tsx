@@ -1,20 +1,20 @@
-import { Globe, Share2, Mail, GraduationCap } from "lucide-react"
-import Image from "next/image"
+import { FaInstagram, FaLinkedinIn, Music2, GraduationCap } from "lucide-react";
+import Image from "next/image";
 
 const programs = [
-  "AI & Machine Learning",
-  "Blockchain Engineering",
-  "Full Stack Development",
-  "Cybersecurity Professional",
-  "Cloud Architecture",
+  "Digital Foundation Program",
+  "Frontend Engineering & UI/UX",
+  "Backend Engineering wih AI",
+  "Fullstack Engineering with AI",
+  "Data Intelligence with AI",
 ]
 
 const resources = [
-  "Success Stories",
+  "Learning Materials",
   "Scholarships",
   "Tech Blog",
   "Student Portal",
-  "Hiring Partners",
+  "Internships",
 ]
 
 const legalLinks = ["Privacy Policy", "Terms of Service", "Cookie Policy"]
@@ -44,16 +44,52 @@ export function SiteFooter() {
               connections.
             </p>
             <div className="mt-6 flex items-center gap-3">
-              {[Globe, Share2, Mail].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#1a1a22] text-neutral-300 transition-colors hover:bg-neutral-800 hover:text-white"
-                  aria-label="Social link"
-                >
-                  <Icon className="h-5 w-5" aria-hidden="true" />
-                </a>
-              ))}
+              {/* Facebook */}
+              <a
+                href="https://www.facebook.com/yourpage"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#1a1a22] text-neutral-300 transition-all duration-300 hover:bg-blue-600 hover:text-white hover:scale-105"
+                aria-label="Facebook"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 24 24">
+                  <path d="M12,2C6.477,2,2,6.477,2,12c0,5.013,3.693,9.153,8.505,9.876V14.65H8.031v-2.629h2.474v-1.749 c0-2.896,1.411-4.167,3.818-4.167c1.153,0,1.762,0.085,2.051,0.124v2.294h-1.642c-1.022,0-1.379,0.969-1.379,2.061v1.437h2.995 l-0.406,2.629h-2.588v7.247C18.235,21.236,22,17.062,22,12C22,6.477,17.523,2,12,2z"></path>
+              </svg>
+              </a>
+
+              {/* Instagram */}
+              <a
+                href="https://www.instagram.com/yourpage"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#1a1a22] text-neutral-300 transition-all duration-300 hover:bg-pink-600 hover:text-white hover:scale-105"
+                aria-label="Instagram"
+              >
+                <FaInstagram className="h-5 w-5" />
+              </a>
+
+              {/* LinkedIn */}
+              <a
+                href="https://www.linkedin.com/company/yourpage"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#1a1a22] text-neutral-300 transition-all duration-300 hover:bg-blue-700 hover:text-white hover:scale-105"
+                aria-label="LinkedIn"
+              >
+                <FaLinkedinIn className="h-5 w-5" />
+              </a>
+
+              {/* TikTok */}
+              <a
+                href="https://www.tiktok.com/@yourpage"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#1a1a22] text-neutral-300 transition-all duration-300 hover:bg-black hover:text-white hover:scale-105"
+                aria-label="TikTok"
+              >
+                <Music2 className="h-5 w-5" />
+              </a>
+
             </div>
           </div>
 
@@ -119,11 +155,7 @@ export function SiteFooter() {
 
         {/* Bottom row */}
         <div className="mt-14 border-t border-neutral-800 pt-8">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <p className="text-sm uppercase tracking-wider text-neutral-500">
-              &copy; 2024 Korva Tech Hub Academy. All Rights Reserved.
-            </p>
-            <div className="flex flex-wrap gap-x-8 gap-y-2">
+          <div className="flex flex-wrap gap-x-8 gap-y-2">
               {legalLinks.map((item) => (
                 <a
                   key={item}
@@ -133,7 +165,11 @@ export function SiteFooter() {
                   {item}
                 </a>
               ))}
-            </div>
+          </div>
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <p className="text-sm uppercase tracking-wider text-neutral-500">
+              &copy; 2024 Korva Tech Hub Academy. All Rights Reserved.
+            </p>
           </div>
         </div>
       </div>
