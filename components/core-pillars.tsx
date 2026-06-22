@@ -53,7 +53,7 @@ export function CorePillars() {
             Why Korva
           </span>
 
-          <h2 className="mt-6 text-4xl font-bold text-white md:text-5xl">
+          <h2 className="mt-6 text-3xl font-bold text-white md:text-5xl">
             The Foundation Behind
             <span className="block text-violet-400">
               Every Successful Learner

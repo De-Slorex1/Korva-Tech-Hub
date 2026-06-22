@@ -4,6 +4,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
+import { useRouter } from "next/navigation"
 
 const testimonials = [
   {
@@ -33,6 +34,7 @@ const testimonials = [
 ]
 
 export function WallOfFame() {
+  const router = useRouter()
   return (
     <section className="relative overflow-hidden px-6 py-24">
 
@@ -177,6 +179,9 @@ export function WallOfFame() {
             </p>
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:justify-center">
                 <button
+                    onClick={() => {
+                      router.push(" https://chat.whatsapp.com/JCKHLqVLkGcGwBUXV9GYOV")
+                    }}
                     className="
                     w-full
                     sm:w-auto
@@ -196,6 +201,9 @@ export function WallOfFame() {
                 </button>
 
                 <button
+                    onClick={() => {
+                      router.push("/enrollment")
+                    }}
                     className="
                     w-full
                     sm:w-auto

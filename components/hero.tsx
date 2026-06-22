@@ -90,11 +90,11 @@ export function Hero() {
             <div className="mt-14 grid grid-cols-3 gap-8">
               <div>
                 <h3 className="text-3xl font-bold text-white">
-                 <Counter value={200} />+
+                 200+
                 </h3>
 
                 <p className="mt-1 text-sm text-neutral-400">
-                  <Counter value={5} />
+                  Students
                 </p>
               </div>
 

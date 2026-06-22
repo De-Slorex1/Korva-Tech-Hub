@@ -231,12 +231,21 @@ export function ReviewStep({
           Back
         </button>
 
-        <button
+         <button
           onClick={handleProceed}
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition hover:bg-violet-500 disabled:opacity-60 disabled:cursor-not-allowed"
+          className="
+            inline-flex w-full sm:w-auto items-center justify-center gap-2
+            rounded-xl bg-violet-600 px-6 py-3 text-sm font-medium text-white
+            transition hover:bg-violet-500
+            disabled:opacity-60 disabled:cursor-not-allowed
+            active:scale-[0.99]
+            shadow-[0_0_25px_rgba(139,92,246,0.25)]
+          "
         >
-          {loading ? "Redirecting..." : (
+          {loading ? (
+            "Redirecting..."
+          ) : (
             <>
               {data.paymentPlan === "scholarship"
                 ? "Submit Application"

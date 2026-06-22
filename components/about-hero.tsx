@@ -135,83 +135,80 @@ export function AboutHero() {
         </p>
 
         {/* STATS */}
+        <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6 w-full">
 
-        {/* STATS */}
-
-          <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
-            <div className="
-  w-full
-  rounded-2xl
-  border border-white/10
-  bg-white/[0.03]
-  p-6
-  text-center
-  backdrop-blur-sm
-  transition-all
-  duration-300
-  hover:-translate-y-1
-  hover:border-violet-500/30
-">
-              <h3 className="text-4xl font-bold text-white">
-                500+
-              </h3>
-
-              <p className="mt-2 text-white/60">
-                Students Trained
-              </p>
-
-            </div>
-
-                       <div className="
-  w-full
-  rounded-2xl
-  border border-white/10
-  bg-white/[0.03]
-  p-6
-  text-center
-  backdrop-blur-sm
-  transition-all
-  duration-300
-  hover:-translate-y-1
-  hover:border-violet-500/30
-  ">
-
-              <h3 className="text-4xl font-bold text-white">
-                10+
-              </h3>
-
-              <p className="mt-2 text-white/60">
-                Career Pathways
-              </p>
-
-            </div>
-
-                                   <div className="
-  w-full
-  rounded-2xl
-  border border-white/10
-  bg-white/[0.03]
-  p-6
-  text-center
-  backdrop-blur-sm
-  transition-all
-  duration-300
-  hover:-translate-y-1
-  hover:border-violet-500/30
-  ">
-
-              <h3 className="text-4xl font-bold text-white">
-                AI
-              </h3>
-
-              <p className="mt-2 text-white/60">
-                Integrated Learning
-              </p>
-
-            </div>
-
+          {/* Card 1 */}
+          <div className="
+            w-full
+            rounded-2xl
+            border border-white/10
+            bg-white/[0.03]
+            p-6
+            text-center
+            backdrop-blur-sm
+            transition-all
+            duration-300
+            hover:-translate-y-1
+            hover:border-violet-500/30
+            hover:shadow-[0_10px_30px_rgba(139,92,246,0.15)]
+          ">
+            <h3 className="text-4xl font-bold text-white">
+              500+
+            </h3>
+            <p className="mt-2 text-white/60">
+              Students Trained
+            </p>
           </div>
 
+          {/* Card 2 */}
+          <div className="
+            w-full
+            rounded-2xl
+            border border-white/10
+            bg-white/[0.03]
+            p-6
+            text-center
+            backdrop-blur-sm
+            transition-all
+            duration-300
+            hover:-translate-y-1
+            hover:border-violet-500/30
+            hover:shadow-[0_10px_30px_rgba(139,92,246,0.15)]
+          ">
+            <h3 className="text-4xl font-bold text-white">
+              10+
+            </h3>
+            <p className="mt-2 text-white/60">
+              Career Pathways
+            </p>
+          </div>
+
+          {/* Card 3 */}
+          <div className="
+            w-full
+            rounded-2xl
+            border border-white/10
+            bg-white/[0.03]
+            p-6
+            text-center
+            backdrop-blur-sm
+            transition-all
+            duration-300
+            hover:-translate-y-1
+            hover:border-violet-500/30
+            hover:shadow-[0_10px_30px_rgba(139,92,246,0.15)]
+          ">
+            <h3 className="text-4xl font-bold text-white">
+              AI
+            </h3>
+            <p className="mt-2 text-white/60">
+              Integrated Learning
+            </p>
+          </div>
+
+        </div>
+
+        
         {/* CTA */}
 
         <div className="mt-14 flex flex-col items-center justify-center gap-4 sm:flex-row">

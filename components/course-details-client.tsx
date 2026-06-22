@@ -156,7 +156,7 @@ export default function CourseSidebar({
                     </button>
     
                     <button
-                        onClick={() => router.push("https://wa.me/2349052639990?text=Hello%20Korva%20Tech%20Hub,%20I%20would%20like%20to%20speak%20with%20an%20advisor%20about%20your%20programs.")}
+                        onClick={() => router.push("https://chat.whatsapp.com/JCKHLqVLkGcGwBUXV9GYOV")}
                         className="mt-3 w-full rounded-xl border border-neutral-700 py-4"
                     >
                         Join Our Community

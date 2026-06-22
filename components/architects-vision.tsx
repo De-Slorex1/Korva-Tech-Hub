@@ -8,9 +8,9 @@ const team = [
     bio: "Passionate about creating practical and accessible tech education opportunities for aspiring professionals.",
   },
   {
-    name: "Team Member",
-    role: "CFO",
-    image: "/moji.png",
+    name: "Adebayo Mojisola",
+    role: "CFO/Social Media Manager",
+    image: "/moji.jpeg",
     bio: "Guiding learners through real-world software engineering and modern development practices.",
   },
   

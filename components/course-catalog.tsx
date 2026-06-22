@@ -308,38 +308,50 @@ export function CourseCatalog() {
                   </div>
 
                   {/* FOOTER */}
-                  <div className="mt-8 flex items-center justify-between border-t border-neutral-800 pt-5">
+                  <div className="mt-8 border-t border-neutral-800 pt-5">
+                    
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-                    <div>
+                      {/* PRICE SECTION */}
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2 flex-wrap">
 
-                      <div className="flex items-center gap-2">
+                          <span className="text-lg sm:text-xl font-bold text-white">
+                            {p.price.fullPayment.discounted}
+                          </span>
 
-                        <span className="text-lg font-bold text-white">
-                          {p.price.fullPayment.discounted}
-                        </span>
+                          <span className="text-sm text-neutral-500 line-through">
+                            {p.price.fullPayment.original}
+                          </span>
 
-                        <span className="text-sm text-neutral-500 line-through">
-                          {p.price.fullPayment.original}
-                        </span>
+                        </div>
 
+                        {/* optional tag (kept ready) */}
+                        {/* <span className="inline-flex w-fit rounded-full bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-400">
+                          Limited Offer
+                        </span> */}
                       </div>
 
-                      {/* <span className="mt-2 inline-flex rounded-full bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-400">
-                        Limited Offer
-                      </span> */}
+                      {/* BUTTON SECTION */}
+                      <button
+                        onClick={() =>
+                          router.push(`/courses/${p.code.toLowerCase()}`)
+                        }
+                        className="
+                          w-full sm:w-auto
+                          rounded-xl
+                          px-5 py-3
+                          text-sm font-bold text-black
+                          transition-all duration-300
+                          hover:scale-[1.03]
+                          active:scale-[0.98]
+                        "
+                        style={{ backgroundColor: p.color }}
+                      >
+                        View Program
+                      </button>
 
                     </div>
-
-                    <button
-                      onClick={() =>
-                        router.push(`/courses/${p.code.toLowerCase()}`)
-                      }
-                      className="rounded-lg px-4 py-3 text-sm font-bold text-black transition-all duration-300 hover:scale-105"
-                      style={{ backgroundColor: p.color }}
-                    >
-                      View Program
-                    </button>
-
                   </div>
 
                 </div>

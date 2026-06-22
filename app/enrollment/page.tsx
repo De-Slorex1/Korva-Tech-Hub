@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header"
 import { EnrollmentWizard } from "@/components/enrollment-wizard"
+import { SiteFooter } from "@/components/site-footer"
 
 export default function Page() {
   return (
@@ -15,6 +16,8 @@ export default function Page() {
         <div className="mx-auto max-w-3xl px-6 py-14">
           <EnrollmentWizard />
         </div>
+
+        <SiteFooter />
       </div>
     </main>
   )

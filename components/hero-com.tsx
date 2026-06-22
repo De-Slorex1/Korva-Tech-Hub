@@ -1,7 +1,9 @@
 import { ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { usePathname, useRouter } from "next/navigation"
 
 export function Hero() {
+  const router = useRouter()
   return (
     <section className="relative">
 
@@ -51,6 +53,9 @@ export function Hero() {
         <div className="mt-12 flex flex-col gap-4 sm:flex-row">
 
           <Button
+            onClick={() => {
+              router.push(" https://chat.whatsapp.com/JCKHLqVLkGcGwBUXV9GYOV")
+            }}
             className="
               h-12
               rounded-xl
@@ -68,7 +73,7 @@ export function Hero() {
             <ArrowRight className="ml-2 size-4" />
           </Button>
 
-          <Button
+          {/* <Button
             variant="outline"
             className="
               h-12
@@ -84,7 +89,7 @@ export function Hero() {
             "
           >
             Explore Benefits
-          </Button>
+          </Button> */}
 
         </div>
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, ArrowRight } from "lucide-react";
+import { GridBackground } from "@/components/grid-background";
 
 export default function PaymentSuccessPage() {
   const searchParams = useSearchParams();
@@ -93,7 +94,8 @@ export default function PaymentSuccessPage() {
 
   return (
     <div className="min-h-screen bg-[#050816] text-white flex items-center justify-center px-6">
-      <div className="max-w-3xl w-full text-center">
+      <GridBackground />
+      <div className="relative max-w-3xl w-full text-center">
 
         {/* ICON */}
         <div className="flex justify-center">

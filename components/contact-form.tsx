@@ -119,7 +119,7 @@ export function ContactForm() {
             name="fullName"
             value={formData.fullName}
             onChange={handleChange}
-            placeholder="Jacob Samson Aina"
+            placeholder="Fullname"
             className="mt-2 bg-white/[0.08] rounded-lg border outline-violet-500/30 border-white/[0.08] transition-all duration-300  hover:border-violet-500/30 hover:bg-white/[0.04]"
           />
         </div>

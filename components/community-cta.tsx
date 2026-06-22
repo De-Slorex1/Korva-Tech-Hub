@@ -2,7 +2,7 @@ import Image from "next/image"
 import { MessageCircle } from "lucide-react"
 import { CommunityGlobe } from "./community-globe"
 
-const WHATSAPP_INVITE_URL = "https://chat.whatsapp.com/"
+const WHATSAPP_INVITE_URL = "https://chat.whatsapp.com/JCKHLqVLkGcGwBUXV9GYOV"
 
 export function CommunityCta() {
   return (
