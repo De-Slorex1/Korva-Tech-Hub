@@ -72,16 +72,16 @@ export function SiteHeader() {
                 <DropdownMenu key={link.label}>
                   <DropdownMenuTrigger className="flex items-center gap-1 text-base transition hover:text-white">
                     {link.label}
-                    <ChevronDown className="h-4 w-4" />
+                    <ChevronDown className="h-5 w-5" />
                   </DropdownMenuTrigger>
 
                   <DropdownMenuContent className="border-neutral-800 bg-[#13131a] text-neutral-200">
                     {portalItems.map((item) => (
                       <DropdownMenuItem
                         key={item}
-                        className="cursor-pointer focus:bg-neutral-800 focus:text-white"
+                        className="cursor-pointer focus:bg-neutral-800 hover:text-white focus:text-white"
                       >
-                        {item}
+                        <a href="/sign-in" className="text-white hover:text-white">{item}</a>
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
@@ -107,7 +107,7 @@ export function SiteHeader() {
           <div className="flex items-center gap-4">
 
             <a
-              href="#"
+              href="/sign-in"
               className="hidden transition hover:text-white sm:inline"
             >
               Sign In
