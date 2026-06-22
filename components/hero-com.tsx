@@ -1,11 +1,8 @@
-"use client"
-
 import { ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { usePathname, useRouter } from "next/navigation"
+
 
 export function Hero() {
-  const router = useRouter()
   return (
     <section className="relative">
 
@@ -54,26 +51,32 @@ export function Hero() {
 
         <div className="mt-12 flex flex-col gap-4 sm:flex-row">
 
-          <Button
-            onClick={() => {
-              router.push(" https://chat.whatsapp.com/JCKHLqVLkGcGwBUXV9GYOV")
-            }}
-            className="
-              h-12
-              rounded-xl
-              bg-violet-600
-              px-8
-              text-white
-              transition-all
-              duration-300
-              hover:scale-105
-              hover:bg-violet-500
-            "
-          >
-            Join Community
+          <a
+                  href="https://chat.whatsapp.com/JCKHLqVLkGcGwBUXV9GYOV"
+                  className="
+                    w-full sm:w-auto
+                    relative overflow-hidden
+                    rounded-2xl
+                    bg-gradient-to-r from-violet-600 to-violet-500
+                    px-8 py-4
+                    text-center
+                    font-semibold text-white
 
-            <ArrowRight className="ml-2 size-4" />
-          </Button>
+                    shadow-lg shadow-violet-500/20
+                    transition-all duration-300
+
+                    hover:shadow-violet-500/40
+                    hover:brightness-110
+                    active:scale-[0.98]
+
+                    focus:outline-none focus:ring-2 focus:ring-violet-400/50
+                  "
+                >
+                  <span className="relative z-10">Join Our Community</span>
+
+                  {/* subtle glow effect */}
+                  <span className="absolute inset-0 opacity-0 transition-opacity duration-300 hover:opacity-100 bg-white/10" />
+                </a>
 
           {/* <Button
             variant="outline"
