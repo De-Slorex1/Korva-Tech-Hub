@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTiktok } from "react-icons/fa";
 import {
   Brain,
   BriefcaseBusiness,
@@ -69,6 +70,36 @@ export default function WhyKorvaSection() {
             mentorship, and career preparation to help students become
             job-ready software engineers.
           </p>
+          
+          <div className="mt-6 flex items-center gap-3">
+            <a
+              href="#"
+              className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#1a1a22] text-neutral-300 transition-all duration-300 hover:scale-105 hover:bg-blue-600 hover:text-white"
+            >
+              <FaFacebookF size={20} />
+            </a>
+
+            <a
+              href="#"
+              className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#1a1a22] text-neutral-300 transition-all duration-300 hover:scale-105 hover:bg-pink-600 hover:text-white"
+            >
+              <FaInstagram size={20} />
+            </a>
+
+            <a
+              href="#"
+              className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#1a1a22] text-neutral-300 transition-all duration-300 hover:scale-105 hover:bg-blue-700 hover:text-white"
+            >
+              <FaLinkedinIn size={20} />
+            </a>
+
+            <a
+              href="#"
+              className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#1a1a22] text-neutral-300 transition-all duration-300 hover:scale-105 hover:bg-black hover:text-white"
+            >
+              <FaTiktok size={20} />
+            </a>
+          </div>
         </motion.div>
 
         <div className="mt-20 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
